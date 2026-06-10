@@ -2070,6 +2070,30 @@ struct CustomTitlebarLeadingPaddingTests {
             ) == 8
         )
     }
+
+    // Regression: toggling the sidebar at the default width used to move the
+    // folder/title by (defaultSidebarWidth - minimumSidebarWidth), because the
+    // hidden state used the minimum-based inset while the visible state tracked the
+    // actual width. The windowed title inset must not depend on sidebar visibility.
+    @Test func togglingSidebarAtDefaultWidthDoesNotMoveTitle() {
+        let width = CGFloat(SessionPersistencePolicy.defaultSidebarWidth)
+        let minimum = CGFloat(SessionPersistencePolicy.minimumSidebarWidth)
+        let visible = ContentView.customTitlebarLeadingPadding(
+            isFullScreen: false,
+            isSidebarVisible: true,
+            sidebarWidth: width,
+            minimumSidebarWidth: minimum,
+            titlebarLeadingInset: 82
+        )
+        let hidden = ContentView.customTitlebarLeadingPadding(
+            isFullScreen: false,
+            isSidebarVisible: false,
+            sidebarWidth: width,
+            minimumSidebarWidth: minimum,
+            titlebarLeadingInset: 82
+        )
+        #expect(visible == hidden)
+    }
 }
 
 
