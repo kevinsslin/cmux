@@ -2079,16 +2079,15 @@ struct ContentView: View {
         }
 
         let minimumSidebarTitleInset = max(titlebarLeadingInset, minimumSidebarWidth + 12)
-        guard isSidebarVisible else {
-            return minimumSidebarTitleInset
-        }
-
-        let visibleSidebarTitleInset = sidebarWidth + 12
-        // Absorb floating-point drift around the minimum-width clamp.
+        // Position the title from the sidebar's trailing edge using the persisted
+        // width, independent of whether the sidebar is currently shown, so toggling
+        // the sidebar does not move the folder/title. A sidebar at or under the
+        // minimum width keeps the minimum inset (also absorbs floating-point drift
+        // around the minimum-width clamp).
         guard sidebarWidth > minimumSidebarWidth + 0.5 else {
             return minimumSidebarTitleInset
         }
-        return max(titlebarLeadingInset, visibleSidebarTitleInset)
+        return max(titlebarLeadingInset, sidebarWidth + 12)
     }
 
     /// Where the always-visible fullscreen titlebar controls (sidebar toggle,
